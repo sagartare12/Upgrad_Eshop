@@ -1,6 +1,6 @@
 const Product = require("../models/product.model");
 
-exports.fetchProducts = async (req, res) => {
+exports.getProducts = async (req, res) => {
   try {
     let dir = { DESC: -1, ASC: 1 };
     let category = { $regex: "^[a-zA-Z]*" };
@@ -34,7 +34,7 @@ exports.fetchProducts = async (req, res) => {
     } else {
       const sortBy = { [key]: direction };
       console.log(sortBy);
-      result = await productModel
+      result = await Product
         .find({ category: category })
         .sort(sortBy)
         .skip(pageNo * pageSize)
@@ -51,9 +51,9 @@ exports.fetchProducts = async (req, res) => {
   }
 };
 
-exports.fetchCategories = async (req, res) => {
+exports.getProductCategories = async (req, res) => {
   try {
-    const result = await productModel.find({}, { _id: 0, category: 1 });
+    const result = await Product.find({}, { _id: 0, category: 1 });
     const responseObject = [];
     result.forEach((doc) => {
       responseObject.push(doc.category);
