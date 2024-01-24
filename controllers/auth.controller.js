@@ -8,9 +8,9 @@ const authConfig = require("../configs/auth.config")
 exports.signUp=async(req,res)=>{
     const hashedPass = bcrypt.hashSync(req.body.password,10);
     
-    if(req.body.phoneNumber.toString().length!=10){
+    if(req.body.contactNumber.toString().length!=10){
         return res.status(403).send({
-            message:`Phone number is invalid`
+            message:`Invalid contact number!'`
         })
     }
 
@@ -25,18 +25,16 @@ exports.signUp=async(req,res)=>{
               return res.status(400).json({ message: "Invalid email-id format!" });
             }
           
-        //     if (!/^[a-zA-Z0-9._-]+$/.test(req.body.email.split("@")[0])) {
-        //       return res.status(400).json({ message: "Invalid email-id format!" });
-        //     }
+       
 
 
     const userObj={
         firstName:req.body.firstName,
         lastName:req.body.lastName,
-        userName:req.body.userName,
+       
         email:req.body.email,
         password:hashedPass,
-        phoneNumber:req.body.phoneNumber,
+        contactNumber:req.body.contactNumber,
         role:req.body.role
         
     }
@@ -46,11 +44,7 @@ try{
         _id:userCreate._id,
         firstName:userCreate.firstName,
         lastName:userCreate.lastName,
-        // userName:userCreate.userName,
-        email:userCreate.email,
-        // phoneNumber:userCreate.phoneNumber,
-        // createdAt:userCreate.createdAt,
-        // role:userCreate.role
+        email:userCreate.email
     };
     
 
@@ -93,10 +87,10 @@ exports.signIn=async(req,res)=>{
         const name=`${user.firstName} ${user.lastName}`
     
 
-        return res.status(201).json({
+        return res.header('x-auth-token',token).status(201).json({
             email:user.email,
             name:name,
-            token:token
+            isAuthenticated:true
         })
 
 }

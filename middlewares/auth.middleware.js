@@ -3,10 +3,10 @@ const jwt = require("jsonwebtoken")
 const config = require("../configs/auth.config")
 
 verifyToken=(req,res,next)=>{
-    let token = req.headers["x-access-token"];
+    let token = req.headers["x-auth-token"];
     if(!token){
         return res.status(403).send({
-            message:`No token provided`
+            message:`Please login first to access this endpoint!'`
         })
     }
 
@@ -21,10 +21,32 @@ verifyToken=(req,res,next)=>{
     next();
     })
 }
-
+verifyAdmin = async (req, res, next) => {
+    const user = await User.findOne({ email: req.userId });
+    if (user.role !== "ADMIN") {
+      return res
+        .status(401)
+        .json("You are not authorised to access this endpoint!");
+    }
+  
+    next();
+  };
+  
+ verifyUser = async(req, res, next) => {
+    const user = await User.findOne({ email: req.userId });
+    if (user.role !== "USER") {
+      return res
+        .status(401)
+        .json("You are not authorised to access this endpoint!");
+    }
+  
+    next();
+  };
 
 const authFunction ={
-    verifyToken :verifyToken
+    verifyToken :verifyToken,
+    verifyAdmin: verifyAdmin,
+    verifyUser: verifyUser,
 }
 
 module.exports = authFunction

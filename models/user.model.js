@@ -10,11 +10,7 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-     userName:{
-        type:String,
-        required:true,
-        unique:true,
-    },
+  
     email: {
         type: String,
         required: true,
@@ -26,8 +22,8 @@ const userSchema = new mongoose.Schema({
         type:String,
         required:true,
       },
-      phoneNumber: {
-        type: Number,
+      contactNumber: {
+        type: String,
         required: true,
       },
       role:{
