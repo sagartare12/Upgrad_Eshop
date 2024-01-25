@@ -16,7 +16,7 @@ verifyToken=(req,res,next)=>{
         message:"Unauthorised"
     })
     }
-    console.log(payload)
+  
     req.userId=payload.id;
     next();
     })
@@ -33,6 +33,8 @@ verifyAdmin = async (req, res, next) => {
   };
   
  verifyUser = async(req, res, next) => {
+
+    console.log("ji")
     const user = await User.findOne({ email: req.userId });
     if (user.role !== "USER") {
       return res

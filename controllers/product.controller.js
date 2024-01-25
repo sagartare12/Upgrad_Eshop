@@ -67,9 +67,9 @@ exports.getProductCategories = async (req, res) => {
   }
 };
 
-exports.fetchById = async (req, res) => {
+exports.getProductById  = async (req, res) => {
   try {
-    const result = await productModel.find(
+    const result = await Product.find(
       { productId: req.params.id },
       { _id: 0, __v: 0 }
     );
@@ -127,7 +127,7 @@ exports.saveProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const productUpdated = await productModel.findOneAndUpdate(
+    const productUpdated = await Product.findOneAndUpdate(
       { productId: req.params.id },
       { $set: req.body }
     );
@@ -137,7 +137,7 @@ exports.updateProduct = async (req, res) => {
         .send(`No Product found for ID - ${req.params.id}!`);
     }
 
-    const response = await productModel.find(
+    const response = await Product.find(
       { productId: req.params.id },
       { _id: 0, __v: 0 }
     );
@@ -156,7 +156,7 @@ exports.updateProduct = async (req, res) => {
 
 exports.deleteProduct = async (req, res) => {
   try {
-    const result = await productModel.findOneAndDelete({
+    const result = await Product.findOneAndDelete({
       productId: req.params.id,
     });
     if (!result) {
