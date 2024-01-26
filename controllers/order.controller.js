@@ -7,14 +7,17 @@ const ShippingAddress = require('../models/shippingAddress.model')
 exports.createOrder = async(req,res)=>{
 
     const { productId, addressId,quantity} = req.body
-    const user = await User.findOne({email:req.userId})
+    const user = await User.findOne({email:req.userId}).select('-password')
     
     try{
-      const order=await Order.create({ productId, addressId,quantity});
-      const product = await Product.findOne({productId:order.productId})
+      const  address = await ShippingAddress.findOne({'user._id':user._id})
+      const order=await Order.create({ productId:req.body.productId, addressId:address._id,quantity});
+
+      const orderRes= await Order.findById(order._id).populate('addressId','productId')
+      console.log(order)
+      const product = await Product.findOne({_id:order.productId})
       if(!product) return res.status(400).json(`No address fround for id - ${req.body.productId}`);
       if(product.availableItems<1) return res.status(400).json(`Product with ID - ${req.body.productId} is currently out of stock!`);
-       const  address = await ShippingAddress.findOne({'user._id':user._id})
         return res.status(200).send({
           id:order._id,
           user:user,

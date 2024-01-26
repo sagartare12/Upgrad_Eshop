@@ -18,7 +18,7 @@ const shippingAddressSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    phoneNumber:{
+    contactNumber:{
         type:String,
         required:true,
     },
@@ -27,6 +27,7 @@ const shippingAddressSchema = new mongoose.Schema({
         required:true,
     },
     user:{}
+  
 })
 
 module.exports = mongoose.model("ShippingAddress",shippingAddressSchema)
