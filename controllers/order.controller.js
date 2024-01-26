@@ -8,13 +8,13 @@ exports.createOrder = async(req,res)=>{
 
     const { productId, addressId,quantity} = req.body
     const user = await User.findOne({email:req.userId})
-    const product = await Product.findOne({productId:req.body.productId})
-     const  address = await ShippingAddress.findOne({'user._id':user._id})
-    console.log(address)
-    if(!product) return res.status(400).json(`No address fround for id - ${req.body.productId}`);
-    if(product.availableItems<1) return res.status(400).json(`Product with ID - ${req.body.productId} is currently out of stock!`);
+    
     try{
-        const order=await Order.create({ productId, addressId,quantity});
+      const order=await Order.create({ productId, addressId,quantity});
+      const product = await Product.findOne({productId:order.productId})
+      if(!product) return res.status(400).json(`No address fround for id - ${req.body.productId}`);
+      if(product.availableItems<1) return res.status(400).json(`Product with ID - ${req.body.productId} is currently out of stock!`);
+       const  address = await ShippingAddress.findOne({'user._id':user._id})
         return res.status(200).send({
           id:order._id,
           user:user,
